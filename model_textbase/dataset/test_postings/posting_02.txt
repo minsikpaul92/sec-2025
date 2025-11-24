@@ -1,0 +1,52 @@
+Job Title: Junior Software Developer
+Company: MapleTech Solutions
+Location: Toronto, ON (Hybrid: 3 days on-site, 2 days remote)
+Employment Type: Full-time, Permanent
+Compensation: $58,000–$65,000 annually, based on experience
+
+Overview:
+MapleTech Solutions is seeking a Junior Software Developer to join our internal tools team. You will work closely with senior developers to maintain and enhance applications used across the company. This is a great opportunity for recent graduates or early-career developers who want structured mentorship and exposure to a modern development stack.
+
+Key Responsibilities:
+- Implement features and bug fixes for internal web applications
+- Write unit and integration tests to maintain code quality
+- Participate in code reviews and daily stand-up meetings
+- Collaborate with designers and product owners to refine requirements
+- Document changes and follow our established development workflow
+
+Requirements (Must-Have):
+- 0–2 years of professional experience or equivalent personal/academic projects
+- Proficiency in at least one programming language (Python, JavaScript, or Java)
+- Basic understanding of Git and version control workflows
+- Strong problem-solving skills and attention to detail
+- Ability to work in a team and communicate clearly
+
+Nice-to-Have:
+- Experience with web frameworks (e.g., Django, Flask, React, or Vue)
+- Familiarity with relational databases (e.g., PostgreSQL, MySQL)
+- Exposure to Agile or Scrum methodologies
+
+Work Hours:
+- Standard schedule: Monday to Friday, 9:00 AM–5:00 PM (flexible within core hours)
+- Occasional paid overtime may be requested during critical releases, with notice
+
+Benefits:
+- Health, dental, and vision coverage after 3 months
+- 3 weeks paid vacation to start, plus sick days
+- Annual learning and training budget
+- RRSP matching program after 1 year
+- Access to employee wellness programs
+
+AI Use in Hiring:
+- We may use automated tools to assist in application screening (e.g., keyword matching).
+- All applications are reviewed by a human recruiter before shortlisting.
+- Automated tools do not make final hiring decisions.
+
+Existing Vacancy:
+- This posting is for an existing vacancy.
+
+Application Process:
+Please submit your resume, a brief cover letter, and (optionally) a link to your GitHub or portfolio. Selected candidates will be invited to a two-step interview process, which includes a short technical exercise.
+
+Accommodation:
+MapleTech Solutions is committed to an inclusive and accessible recruitment process. If you require accommodation at any stage, please contact hr@mapletech.ca.

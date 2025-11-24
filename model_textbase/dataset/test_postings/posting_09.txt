@@ -1,0 +1,17 @@
+Position: Data Scientist
+Company: Aurora Analytics
+Location: Waterloo, ON
+Employment Type: Full-time
+Salary: $95,000 - $170,000 per year
+
+Overview:
+Develop predictive models, deploy them to production, and partner with product managers.
+
+This role is an existing vacancy on the data science team.
+
+AI is used in the hiring process, and AI is used in screening with full disclosure to applicants.
+
+Requirements:
+- 3+ years of data science experience
+- Python, SQL, and machine learning frameworks
+- Experience shipping models to production

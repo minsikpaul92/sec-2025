@@ -1,0 +1,15 @@
+Position: QA Engineer
+Company: Northern Circuit
+Location: Toronto, ON
+Employment Type: Full-time
+Salary: $75,000 - $95,000 per year
+
+Overview:
+Test web services, build automated suites, and maintain quality gates in CI/CD.
+
+This role is filling an existing vacancy on the QA team.
+
+Requirements:
+- 3+ years in QA or SDET roles
+- Proficiency with Python or JavaScript test frameworks
+- Experience with API testing tools
