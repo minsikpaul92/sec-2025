@@ -1,0 +1,17 @@
+Position: Software Developer
+Company: BrightWave Labs
+Location: Toronto, ON
+Employment Type: Full-time, Permanent
+Salary: $70,000 - $90,000 per year
+
+Overview:
+Design and maintain APIs for our core platform and collaborate with product teams.
+
+This role is filling an existing vacancy in the engineering group.
+
+We use AI in the hiring process, and AI is used in screening with full disclosure to applicants.
+
+Requirements:
+- 3+ years of experience with Python or Node.js
+- Experience with cloud services (AWS or GCP)
+- Familiarity with CI/CD pipelines

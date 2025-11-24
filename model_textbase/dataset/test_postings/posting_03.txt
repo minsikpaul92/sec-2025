@@ -1,0 +1,17 @@
+Position: Data Analyst
+Company: InsightWorks
+Location: Hamilton, ON
+Employment Type: Full-time
+Salary: $70,000 - $90,000 per year
+
+Overview:
+Build dashboards, generate insights, and support business teams with data reports.
+
+This position is filling an existing vacancy on the analytics team.
+
+We use AI in the hiring process, and AI is used in screening with full disclosure to applicants.
+
+Requirements:
+- Strong SQL skills
+- Experience with Excel and BI tools (e.g., Power BI, Tableau)
+- Comfort presenting insights to stakeholders
