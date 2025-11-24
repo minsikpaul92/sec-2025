@@ -1,1 +1,135 @@
 /* App-specific styles can be added here */
+body {
+  background: #ffffff; /* dark bg for outside area */
+  font-family: 'Lato', Arial, sans-serif;
+}
+
+.center-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-section {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.03);
+  padding: 36px 34px;
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 230px;
+}
+
+.logo-section img {
+  width: 180px;
+  margin-bottom: 12px;
+}
+
+.logo-section h1 {
+  font-size: 2rem;
+  font-family: inherit;
+}
+
+form {
+  flex: 1;
+  min-width: 340px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: #F2FAFC;
+  border: 1px solid #e0e0e0;
+  border-radius: 7px;
+  font-size: 1rem;
+  color: #000;
+  outline: none;
+  transition: box-shadow .13s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  box-shadow: 0 0 0 2px #1972F0;
+  border-color: #1972F0;
+}
+
+button {
+  background: #1972F0;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 28px;
+  margin-top: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background .2s;
+}
+
+button:hover {
+  background: #FF0000;
+}
+
+.tabs {
+  margin-bottom: 34px;
+  display: flex;
+  gap: 16px;
+}
+
+.tabs button {
+  background: #F2FAFC;
+  color: #1972F0;
+  border: 1px solid #1972F0;
+  border-radius: 5px;
+  padding: 7px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background: #1972F0;
+  color: #fff;
+}
+
+.result-section {
+  background: #F2FAFC;
+  border-radius: 12px;
+  margin-top: 28px;
+  padding: 22px 32px;
+  max-width: 700px;
+}
+
+.result-section h2 {
+  background: #1972F0;
+  color: #fff;
+  font-size: 2rem;
+  text-align: center;
+  margin: 0 0 24px 0;
+  border-radius: 6px;
+  padding: 12px;
+  font-family: inherit;
+}
+
+@media (max-width: 900px) {
+  .form-section {
+    flex-direction: column;
+    gap: 0;
+    padding: 28px 10px;
+  }
+  .logo-section {
+    margin-bottom: 20px;
+  }
+}
