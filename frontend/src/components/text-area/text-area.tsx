@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-
-interface ValidationResult {
-  classification: string;
-  confidence: number;
-  missing_fields?: string[];
-  transparency_score?: number;
-}
+import type { ValidationResult } from "@/lib/validation";
 
 interface TextAreaProps {
   onResult?: (result: ValidationResult) => void;

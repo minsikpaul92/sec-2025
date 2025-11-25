@@ -3,14 +3,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import Header from './components/header/header';
 import Form from './components/form/form'
 import Text_area from './components/text-area/text-area';
+import ResultPanel from './components/result/result';
+import type { ValidationResult } from '@/lib/validation';
 import './App.css'; 
-
-interface ValidationResult {
-  classification: string;
-  confidence: number;
-  missing_fields?: string[];
-  transparency_score?: number;
-}
 
 function App() {
   const [result, setResult] = useState<ValidationResult | null>(null);
@@ -56,33 +51,7 @@ function App() {
 
         {/* Result Section */}
         {result && (
-          <div className="result-section">
-            <h2>Job validation result</h2>
-            <div className={`result-status ${result.classification.toLowerCase()}`}>
-              <strong>{resultMessage}</strong>
-            </div>
-            
-            {result.missing_fields && result.missing_fields.length > 0 && (
-              <div className="result-details">
-                <h3>Missing Fields:</h3>
-                <ul>
-                  {result.missing_fields.map((field, idx) => (
-                    <li key={idx}>{field}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {result.transparency_score !== undefined && (
-              <div className="result-details">
-                <h3>Transparency Score: {result.transparency_score}%</h3>
-              </div>
-            )}
-
-            <div className="result-confidence">
-              <p>Confidence: {(result.confidence || 0).toFixed(2)}%</p>
-            </div>
-          </div>
+          <ResultPanel result={result} statusMessage={resultMessage} />
         )}
       </div>
     </div>

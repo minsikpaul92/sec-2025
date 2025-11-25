@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
-interface ValidationResult {
-  classification: string;
-  confidence: number;
-  missing_fields?: string[];
-  transparency_score?: number;
-}
+import type { ValidationResult } from "@/lib/validation";
 
 interface FormProps {
   onResult?: (result: ValidationResult) => void;
@@ -17,7 +11,6 @@ function Form({ onResult }: FormProps) {
   // Các state cho form
   const [title, setTitle] = useState("");
   const [salary, setSalary] = useState("");
-  const [customSalary, setCustomSalary] = useState("");
   const [location, setLocation] = useState("");
   const [employer, setEmployer] = useState("");
   const [description, setDescription] = useState("");
@@ -30,13 +23,10 @@ function Form({ onResult }: FormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Chọn đúng lương nếu là "other"
-    const salaryValue = salary === "other" ? customSalary : salary;
-
     // Tổng hợp dữ liệu gửi backend
     const payload = {
       title,
-      salary: salaryValue,
+      salary,
       location,
       employer,
       description,
@@ -75,17 +65,7 @@ function Form({ onResult }: FormProps) {
         <option value="20k-30k">$20,000 - $30,000</option>
         <option value="30k-40k">$30,000 - $40,000</option>
         <option value="40k-50k">$40,000 - $50,000</option>
-        <option value="other">Other (specify below)</option>
       </select>
-      {salary === "other" && (
-        <Input
-          type="number"
-          className="mt-4"
-          placeholder="Enter specific salary"
-          value={customSalary}
-          onChange={e => setCustomSalary(e.target.value)}
-        />
-      )}
       <Input type="text" placeholder="Location..." className="mt-4" value={location} onChange={e => setLocation(e.target.value)} />
       <Input type="text" placeholder="Employer..." className="mt-4" value={employer} onChange={e => setEmployer(e.target.value)} />
       <Input type="text" placeholder="Description..." className="mt-4" value={description} onChange={e => setDescription(e.target.value)} />
