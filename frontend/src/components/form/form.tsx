@@ -2,7 +2,18 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-function Form() {
+interface ValidationResult {
+  classification: string;
+  confidence: number;
+  missing_fields?: string[];
+  transparency_score?: number;
+}
+
+interface FormProps {
+  onResult?: (result: ValidationResult) => void;
+}
+
+function Form({ onResult }: FormProps) {
   // Các state cho form
   const [title, setTitle] = useState("");
   const [salary, setSalary] = useState("");
@@ -12,8 +23,8 @@ function Form() {
   const [description, setDescription] = useState("");
   const [requirements, setRequirements] = useState("");
   const [benefits, setBenefits] = useState("");
-  const [employmentType, setEmploymentType] = useState("");
-  const [aiUsed, setAiUsed] = useState("");
+  const [employmentType, setEmploymentType] = useState("fulltime");
+  const [aiUsed, setAiUsed] = useState("yes");
 
   // Xử lý submit
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,19 +42,28 @@ function Form() {
       description,
       requirements,
       benefits,
-      employmentType,
-      aiUsed,
+      employment_type: employmentType,
+      ai_used: aiUsed,
     };
 
-    // Gửi POST request tới API backend (ví dụ /api/job)
-    const response = await fetch("/api/job", {
+    // Gửi POST request tới API backend
+    const response = await fetch("http://localhost:8000/jobs-postings/field-base", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    // Xử lý phản hồi nếu cần
     const data = await response.json();
-    console.log(data);
+    console.log("Response from backend:", data);
+    
+    // Call the onResult callback with the validation result
+    if (onResult) {
+      onResult({
+        classification: data.classification || "ERROR",
+        confidence: data.confidence || 0,
+        missing_fields: data.missing_fields || [],
+        transparency_score: data.transparency_score || 0,
+      });
+    }
   };
 
   return (

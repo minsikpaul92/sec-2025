@@ -1,6 +1,7 @@
 import os
 import re
 from typing import List, Tuple
+import pickle
 
 from sklearn.linear_model import LogisticRegression
 
@@ -52,198 +53,25 @@ def load_postings(data_dir: str) -> Tuple[List[str], List[int]]:
     return texts, labels
 
 
-def extract_rule_features(text: str) -> dict:
-    """
-    Extract rule-based features from a posting.
-
-    These features are based on simple rules like:
-    - whether salary information is present
-    - whether a salary range is present and not too wide
-    - whether AI usage is mentioned and disclosed
-    - whether vacancy type is disclosed
-    - whether 'Canadian experience' is explicitly required
-    """
-    t = text.lower()
-
-    # 0) Basic field presence checks
-    has_title = bool(re.search(r"\b(position|job title|title)\s*:", t))
-    has_description = any(
-        kw in t
-        for kw in [
-            "description:",
-            "overview:",
-            "responsibilities:",
-            "about the role",
-        ]
-    )
-
-    has_location = "location:" in t
-
-    has_employment_type = any(
-        kw in t
-        for kw in [
-            "full-time",
-            "part-time",
-            "contract",
-            "temporary",
-            "intern",
-            "permanent",
-        ]
-    )
-
-    has_requirements = any(
-        kw in t
-        for kw in [
-            "requirements:",
-            "qualifications:",
-        ]
-    )
-
-    has_employer = any(
-        kw in t
-        for kw in [
-            "company:",
-            "employer:",
-            "organization:",
-        ]
-    )
-
-    # 1) Salary / pay information
-    has_salary_keyword = any(
-        kw in t
-        for kw in [
-            "salary",
-            "compensation",
-            "pay",
-            "per hour",
-            "per year",
-            "$",
-        ]
-    )
-
-    # Simple numeric range detection, e.g. "20 - 30", "50000-70000"
-    # Allow optional $ before each number (e.g., "$65,000 - $80,000")
-    range_pattern = r"\$?\s*(\d[\d,]*)\s*[-–]\s*\$?\s*(\d[\d,]*)"
-    range_matches = re.findall(range_pattern, t)
-
-    has_salary_range = False
-    range_exceeds_50k = False
-
-    for a, b in range_matches:
-        try:
-            v1 = int(a.replace(",", ""))
-            v2 = int(b.replace(",", ""))
-            has_salary_range = True
-            if abs(v2 - v1) > 50000:
-                range_exceeds_50k = True
-        except ValueError:
-            continue
-
-    # 2) AI usage disclosure
-    has_ai_keyword = any(
-        kw in t
-        for kw in [
-            "ai",
-            "artificial intelligence",
-            "automated system",
-            "algorithm",
-        ]
-    )
-
-    has_ai_disclosure = any(
-        phrase in t
-        for phrase in [
-            "we use ai",
-            "ai is used",
-            "artificial intelligence is used",
-            "this posting is screened using ai",
-        ]
-    )
-
-    # 3) Vacancy disclosure (existing vs new role)
-    has_vacancy_disclosure = any(
-        phrase in t
-        for phrase in [
-            "existing vacancy",
-            "filling an existing role",
-            "new position",
-            "new role",
-            "newly created role",
-        ]
-    )
-
-    # 4) Canadian experience requirement
-    mentions_canadian_experience = "canadian experience" in t
-
-    return {
-        "has_title": int(has_title),
-        "has_description": int(has_description),
-        "has_location": int(has_location),
-        "has_employment_type": int(has_employment_type),
-        "has_requirements": int(has_requirements),
-        "has_employer": int(has_employer),
-        "has_salary_keyword": int(has_salary_keyword),
-        "has_salary_range": int(has_salary_range),
-        "range_exceeds_50k": int(range_exceeds_50k),
-        "has_ai_keyword": int(has_ai_keyword),
-        "has_ai_disclosure": int(has_ai_disclosure),
-        "has_vacancy_disclosure": int(has_vacancy_disclosure),
-        "mentions_canadian_experience": int(mentions_canadian_experience),
-    }
-
-
 def get_invalid_reasons(text: str) -> List[str]:
     """
-    Return a list of human-readable reasons why a posting is invalid
-    according to the hard rules. If the list is empty, the posting
-    passes the rule-based checks.
+    Return a list of human-readable reasons why a posting is invalid.
+    For plain text classification, we only check basic length.
+    Detailed classification is done by the ML model.
     """
-    f = extract_rule_features(text)
     reasons: List[str] = []
-
-    # 0) Required fields presence
-    if f["has_title"] == 0:
-        reasons.append("Missing title.")
-    if f["has_description"] == 0:
-        reasons.append("Missing description or responsibilities section.")
-    if f["has_salary_keyword"] == 0:
-        reasons.append("Missing salary or compensation information.")
-    if f["has_location"] == 0:
-        reasons.append("Missing location information.")
-    if f["has_employment_type"] == 0:
-        reasons.append("Missing employment type.")
-    if f["has_requirements"] == 0:
-        reasons.append("Missing requirements or qualifications section.")
-    if f["has_employer"] == 0:
-        reasons.append("Missing employer information.")
-
-    # 1) No salary range or too wide
-    if f["has_salary_keyword"] == 0:
-        reasons.append("Missing salary range.")
-    elif f["range_exceeds_50k"] == 1:
-        reasons.append("Salary range is wider than $50,000.")
-
-    # 2) AI usage must be explicitly disclosed
-    if f["has_ai_keyword"] == 0 or f["has_ai_disclosure"] == 0:
-        reasons.append("AI usage and disclosure are required but not clearly stated.")
-
-    # 3) Vacancy type not disclosed -> invalid
-    if f["has_vacancy_disclosure"] == 0:
-        reasons.append("Vacancy type (existing vs new role) is not disclosed.")
-
-    # 4) Posting explicitly demands 'Canadian experience' -> invalid
-    if f["mentions_canadian_experience"] == 1:
-        reasons.append("Posting explicitly demands Canadian experience.")
-
+    
+    # Only check if text is too short
+    if len(text.strip()) < 50:
+        reasons.append("Posting text is too short to classify.")
+    
     return reasons
 
 
 def rule_based_invalid(text: str) -> bool:
     """
-    Apply hard rules to determine if a posting is clearly invalid.
-
-    If any of these rules are triggered, we return True (invalid),
-    without asking the ML model.
+    Apply minimal hard rules. For plain text, we mostly rely on the ML model.
+    Only reject if text is too short.
     """
     reasons = get_invalid_reasons(text)
     return len(reasons) > 0
@@ -251,31 +79,19 @@ def rule_based_invalid(text: str) -> bool:
 
 def build_feature_matrix(texts: List[str]):
     """
-    Convert a list of texts into a simple feature matrix
-    using the rule-based features defined above. The model
-    intentionally excludes vacancy disclosure because the
-    rule-based layer already enforces it and it was skewing
-    the learned decision boundary.
+    Convert a list of texts into a simple feature matrix.
+    For plain text classification, we use basic text statistics.
     """
     X = []
     for txt in texts:
-        f = extract_rule_features(txt)
-        X.append(
-            [
-                f["has_title"],
-                f["has_description"],
-                f["has_location"],
-                f["has_employment_type"],
-                f["has_requirements"],
-                f["has_employer"],
-                f["has_salary_keyword"],
-                f["has_salary_range"],
-                f["range_exceeds_50k"],
-                f["has_ai_keyword"],
-                f["has_ai_disclosure"],
-                f["mentions_canadian_experience"],
-            ]
-        )
+        # Simple features based on text statistics
+        length = len(txt)
+        word_count = len(txt.split())
+        has_salary = 1 if "$" in txt or "salary" in txt.lower() else 0
+        has_location = 1 if any(loc in txt.lower() for loc in ["toronto", "vancouver", "montreal", "calgary", "ottawa", "remote"]) else 0
+        has_requirements = 1 if any(req in txt.lower() for req in ["experience", "requirements", "qualifications", "skills"]) else 0
+        
+        X.append([length, word_count, has_salary, has_location, has_requirements])
     return X
 
 
@@ -367,57 +183,21 @@ def main():
     classifier.train(texts, labels)
     print("Model training completed.\n")
 
-    test_files = sorted(
-        [f for f in os.listdir(TEST_DIR) if f.endswith(".txt")]
-    )
-    num_tests = len(test_files)
-
-    print("Classify new posting files as VALID or INVALID.")
-    print("You can:")
-    print(f"  - Enter a .txt file path (e.g., {TEST_DIR}/posting_01.txt)")
-    if num_tests > 0:
-        print(f"  - Or just enter a test index number 1-{num_tests}")
-    print("Type 'q' to quit.\n")
-
-    while True:
-        prompt_idx = f"1-{num_tests}" if num_tests > 0 else ""
-        user_input = input(
-            f"Path to .txt file or test index ({prompt_idx}): " if prompt_idx else "Path to .txt file: "
-        ).strip()
-        if user_input.lower() == "q":
-            print("Exiting.")
-            break
-
-        # If the user enters a digit, map it to sorted test files
-        if user_input.isdigit():
-            idx = int(user_input)
-            if idx < 1 or idx > num_tests:
-                print(f"Index out of range. Please enter 1-{num_tests}.\n")
-                continue
-            filename = test_files[idx - 1]
-            path = os.path.join(TEST_DIR, filename)
-        else:
-            path = user_input
-
-        if not path.endswith(".txt"):
-            print("Only .txt files are supported.\n")
-            continue
-
-        try:
-            label, confidence, reasons = classifier.predict_file(path)
-            print(f"Prediction: {label} (confidence: {confidence:.2f}%)")
-            if label == "INVALID":
-                if reasons:
-                    print("Reasons:")
-                    for r in reasons:
-                        print(f" - {r}")
-                else:
-                    print("Reasons: Model flagged INVALID (no rule violations).")
-            print()
-        except FileNotFoundError as e:
-            print(e, "\n")
-        except Exception as e:
-            print("Error during prediction:", e, "\n")
+    # Save the trained model
+    print("[SAVING] Saving trained text-based classification model...")
+    model_data = {
+        'model': classifier.model,
+        'label_names': classifier.label_names
+    }
+    
+    model_path = 'textbase_classifier.pkl'
+    with open(model_path, 'wb') as f:
+        pickle.dump(model_data, f)
+    
+    print(f"✓ Model saved to: {model_path}")
+    print("=" * 70)
+    print("Ready to use with FastAPI backend!")
+    print("=" * 70)
 
 
 if __name__ == "__main__":
