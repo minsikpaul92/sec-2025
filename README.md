@@ -65,7 +65,46 @@ npm run dev      # or npm run build && npm run preview
 - **ML transparency (`models_ml/models.py`):** Builds TF-IDF + numeric features, trains a RandomForest, and saves `transparency_model.pkl`; reports compliance scores.
 - **Field validation utility (`models_ml/models_field_base.py`):** Confirms presence of required fields across the CSV and prints counts.
 
-## AI usage and citations
-- OpenAI ChatGPT was used for iterative code refactoring, feature design, debugging assistance, and README drafting; all outputs were reviewed and edited manually.
-- GitHub Copilot is cited in-code (see `backend/main.py` comment) for a helper that reads files and was wrapped in a FastAPI endpoint.
-- Libraries/resources: scikit-learn, numpy, scipy, pandas, FastAPI, uvicorn, React, Vite, Tailwind CSS, shadcn/ui. Data comes from `dataset/job_postings_dataset.csv` and text samples in `dataset/raw_postings` and `dataset/test_postings`.
+## AI Usage & Citation Statement
+
+AI Tools Used
+
+This project used OpenAI ChatGPT and GitHub Copilot to support development tasks such as code refactoring, feature brainstorming, logic troubleshooting, debugging assistance, and documentation drafting. All AI-generated suggestions were manually reviewed, validated, and integrated by the development team.
+
+Purpose of AI Assistance
+
+AI tools were used to:
+	•	improve development efficiency and explore alternative solution approaches,
+	•	brainstorm rule-based features aligned with Ontario’s 2026 Job Posting Transparency requirements,
+	•	refine the logic and flow of the hybrid rule–plus–logistic-regression model,
+	•	identify issues in early iterations of classify_posting.py,
+	•	enhance regex patterns for extracting salary ranges and required fields,
+	•	produce and revise explanatory documentation (README sections, comments),
+	•	clarify edge cases and suggest additional test cases for dataset/test_postings.
+
+AI tools did not make autonomous system design, architectural, or algorithmic decisions.
+All final implementations, including rule sets, scoring logic, and model parameters, were directly authored and verified by the development team.
+
+Human Oversight
+
+All code, logic, and model behavior were written, validated, and tested by the codeXperts team.
+AI assistance was treated strictly as optional input, and all outputs were significantly edited before integration.
+No fully-generated code modules were used.
+
+Specific AI Usage Notes
+	•	ChatGPT assisted with conceptual explanations, reasoning tasks, and iterative improvement of transparency-validation logic.
+	•	GitHub Copilot assisted minimally, specifically with a helper method in backend/main.py to list posting files (documented in-code).
+
+Compliance Disclosure
+
+In accordance with the Working for Workers Four Act, 2024 (S.O. 2024, c.3 – Bill 149), this project fully discloses the use of AI in its development.
+AI tools were used only during development and documentation. They do not participate in automated decision-making within the job-posting evaluation workflow.
+
+References
+	•	Working for Workers Four Act, 2024 (S.O. 2024, c.3 – Bill 149).
+	•	SEC 2025 – Problem Brief: Defines transparency requirements, required posting fields, and compliance expectations.
+	•	SEC 2025 – Opening Briefing: System tasks, expectations, and challenge context.
+	•	SEC 2025 – FAQ & Rules: Judging criteria, allowed tools, and AI-usage disclosure requirements.
+	•	SEC 2025 Job Postings Dataset (dataset/job_postings_dataset.csv, dataset/raw_postings/, dataset/test_postings/).
+	•	Python libraries: scikit-learn, numpy, pandas, FastAPI, uvicorn.
+	•	Frontend libraries: React, Vite, Tailwind CSS.
