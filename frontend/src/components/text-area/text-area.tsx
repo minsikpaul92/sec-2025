@@ -31,7 +31,7 @@ function Text_area({ onResult }: TextAreaProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Textarea placeholder="Nhập nội dung..." className="mt-4" value={text} onChange={e => setText(e.target.value)} />
+      <Textarea placeholder="Enter content..." className="mt-4" value={text} onChange={e => setText(e.target.value)} />
       <Button className="mt-4" type="submit">Check</Button>
     </form>
   );

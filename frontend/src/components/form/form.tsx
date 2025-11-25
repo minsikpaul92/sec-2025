@@ -8,7 +8,7 @@ interface FormProps {
 }
 
 function Form({ onResult }: FormProps) {
-  // Các state cho form
+  // Form state variables
   const [title, setTitle] = useState("");
   const [salary, setSalary] = useState("");
   const [location, setLocation] = useState("");
@@ -19,11 +19,10 @@ function Form({ onResult }: FormProps) {
   const [employmentType, setEmploymentType] = useState("fulltime");
   const [aiUsed, setAiUsed] = useState("yes");
 
-  // Xử lý submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Tổng hợp dữ liệu gửi backend
+    // Compile data to send to backend
     const payload = {
       title,
       salary,
@@ -36,7 +35,7 @@ function Form({ onResult }: FormProps) {
       ai_used: aiUsed,
     };
 
-    // Gửi POST request tới API backend
+    // Send POST request to backend API
     const response = await fetch("http://localhost:8000/jobs-postings/field-base", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

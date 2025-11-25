@@ -3,7 +3,6 @@ import canadaflag from "@/components/header/canada.png"
 function Header() {
   return (
     <header className="logo-section">
-      {/* Flag image */}
       <img src={canadaflag} alt="Canada flag" />
       {/* Main title */}
       <h1>Job Validation</h1>

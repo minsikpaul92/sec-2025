@@ -13,5 +13,4 @@ class FormValidate(BaseModel):
     employer: Optional[str] = None
 
 class TextPosting(BaseModel):
-    """Request model for text-based job posting validation."""
     posting_text: str

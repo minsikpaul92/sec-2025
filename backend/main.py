@@ -11,11 +11,12 @@ from textbase_classifier_loader import get_predictor
 
 app = FastAPI()
 
-# Configure CORS to allow frontend requests
+# This function was generated with assistance from Copilot (Nov 2025 Version).
+# Prompt: "Fix the CORS for a backend accept request from frontend running on localhost ports 5173 and 3000."
 origins = [
-    "http://localhost:5173",      # Vite dev server
+    "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "http://localhost:3000",      # Alternative frontend port
+    "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
 
@@ -27,7 +28,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load transparency model on startup
+# This function was generated with assistance from Copilot (Nov 2025 Version).
+# Prompt: "Load models before the server start."
+# Modifications: Add required_fields.
 transparency_model = None
 transparency_vectorizer = None
 required_fields = None
@@ -105,6 +108,9 @@ async def validate_jobs_posting(job_posting: TextPosting):
         "classification": result.get("classification", "ERROR"),
         "confidence": result.get("confidence", 0.0)
     }
+    
+# This function was generated with assistance from Copilot (Nov 2025 Version).
+# Prompt: "help to generate openapi docs."
 
 @app.post("/jobs-postings/field-base")
 async def validate_jobs_posting_fields(job_posting: FormValidate):
@@ -121,32 +127,25 @@ async def validate_jobs_posting_fields(job_posting: FormValidate):
     job_posting_dict = job_posting.dict()
     missing_fields = [field for field in required_fields_list if not job_posting_dict.get(field)]
     
-    # Determine classification based on missing fields
+    # This function was generated with assistance from Copilot (Nov 2025 Version).
+    # Prompt: "Write a try catch wrap around the models prediction code and handle errors case."
     classification = "VALID" if not missing_fields else "INVALID"
     transparency_score = 0.0
     confidence = 0.0
     
-    # Add ML-based transparency check if model is loaded
     if transparency_model is not None:
         try:
-            # Extract text features
             text = str(job_posting_dict.get('title', '')) + ' ' + str(job_posting_dict.get('description', '')) + ' ' + str(job_posting_dict.get('requirements', ''))
-            
-            # Field completeness
             field_completeness = sum([1 for field in required_fields_list if pd.notna(job_posting_dict.get(field)) and job_posting_dict.get(field) != '']) / len(required_fields_list)
             
-            # Employment type encoding
             employment_type = str(job_posting_dict.get('employment_type', 'Unknown')).lower()
             employment_encoded = 1 if employment_type in ['full-time', 'full time', 'fulltime'] else 0
             
-            # AI used encoding
             ai_used = str(job_posting_dict.get('ai_used', 'Unknown')).lower()
             ai_encoded = 1 if ai_used == 'yes' else (0 if ai_used == 'no' else -1)
             
-            # Salary presence
             salary_present = 1 if pd.notna(job_posting_dict.get('salary')) and job_posting_dict.get('salary') != '' else 0
             
-            # Vectorize and predict
             X_text = transparency_vectorizer.transform([text]).toarray()
             X_numeric = np.array([[field_completeness, employment_encoded, ai_encoded, salary_present]])
             X = np.hstack((X_text, X_numeric))
@@ -155,7 +154,6 @@ async def validate_jobs_posting_fields(job_posting: FormValidate):
             proba = transparency_model.predict_proba(X)
             confidence = float(np.max(proba) * 100)
             
-            # Transparency score is the probability of class 1 (compliant/transparent)
             transparency_score = float(proba[0][1] * 100) if len(proba[0]) > 1 else 0.0
         except Exception as e:
             print(f"Error in transparency model prediction: {e}")

@@ -1,5 +1,20 @@
 """
-Text-Based Classifier Loader - Load and use the trained text classification model for FastAPI
+This function was generated with assistance from Copilot (Nov 2025 Version).
+Prompt: Write a Python class called TextClassifierPredictor that loads a pre-trained text-based job posting classifier from a pickle file. The class should:
+        1. Load a saved model from '../model_textbase/textbase_classifier.pkl' 
+        2. Extract rule-based features from job posting text including:
+            - Basic field presence (title, description, location, employment type, requirements, employer)
+            - Salary information and range validation
+            - AI usage disclosure detection
+            - Vacancy type disclosure
+            - Canadian experience requirement detection
+        3. Provide a method to get reasons why a posting is invalid based on hard rules
+        4. Make predictions on whether a job posting is VALID or INVALID using both rule-based features and ML model
+        5. Handle edge cases like short text and provide confidence scores
+        6. Include a global predictor instance with getter function
+
+        The predict method should return a dictionary with status, classification, and confidence. Include proper error handling and informative print statements.
+
 """
 import pickle
 import re
