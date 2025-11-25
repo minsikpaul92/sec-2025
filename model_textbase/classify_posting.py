@@ -10,7 +10,8 @@ from sklearn.linear_model import LogisticRegression
 DATA_DIR = "dataset/raw_postings"
 TEST_DIR = "dataset/test_postings"
 
-
+# This function was generated with assistance from Copilot (Nov 2025 Version).
+# Prompt: "Write a function to load training postings from a directory"
 def load_postings(data_dir: str) -> Tuple[List[str], List[int]]:
     """
     Load training postings from the given directory.
@@ -33,13 +34,11 @@ def load_postings(data_dir: str) -> Tuple[List[str], List[int]]:
         elif "valid" in lower_name:
             label = 1
         else:
-            # Skip files that do not clearly indicate a label
             print(f"Skipping file without label keyword: {filename}")
             continue
 
         file_path = os.path.join(data_dir, filename)
 
-        # Read the file with a simple encoding fallback
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 text = f.read()
@@ -52,7 +51,8 @@ def load_postings(data_dir: str) -> Tuple[List[str], List[int]]:
 
     return texts, labels
 
-
+# This function was generated with assistance from Copilot (Nov 2025 Version).
+# Prompt: "Write a function to get reasons why a posting is invalid based on hard rules"
 def get_invalid_reasons(text: str) -> List[str]:
     """
     Return a list of human-readable reasons why a posting is invalid.
@@ -84,7 +84,6 @@ def build_feature_matrix(texts: List[str]):
     """
     X = []
     for txt in texts:
-        # Simple features based on text statistics
         length = len(txt)
         word_count = len(txt.split())
         has_salary = 1 if "$" in txt or "salary" in txt.lower() else 0
@@ -94,7 +93,8 @@ def build_feature_matrix(texts: List[str]):
         X.append([length, word_count, has_salary, has_location, has_requirements])
     return X
 
-
+# This function was generated with assistance from Copilot (Nov 2025 Version).
+# Prompt: "Write a PostingClassifier class that combines hard rules with an ML model"
 class PostingClassifier:
     """
     A classifier that combines hard rule checks with a simple ML model.
@@ -117,7 +117,6 @@ class PostingClassifier:
         reasons = get_invalid_reasons(text)
         rule_invalid = len(reasons) > 0
 
-        # 2) Run ML model on the same text
         X = build_feature_matrix([text])
         pred = self.model.predict(X)[0]
         proba = self.model.predict_proba(X)[0]
@@ -125,7 +124,6 @@ class PostingClassifier:
         model_confidence = float(max(proba))
         model_confidence_pct = model_confidence * 100
 
-        # 3) Print detailed analysis
         print("Rule-based analysis:")
         if rule_invalid:
             print("  -> INVALID")
@@ -137,9 +135,6 @@ class PostingClassifier:
         print("Model-based prediction:")
         print(f"  -> {model_label} (confidence: {model_confidence_pct:.2f}%)")
 
-        # 4) Final decision:
-        #    If any rule violation exists, we still treat it as INVALID,
-        #    but we have also shown the model's opinion above.
         if rule_invalid:
             final_label = "INVALID"
             final_confidence_pct = 100.0
@@ -148,13 +143,13 @@ class PostingClassifier:
             final_label = model_label
             final_confidence_pct = model_confidence_pct
             if final_label == "INVALID":
-                # Model judged INVALID even though rules passed
                 final_reasons = [f"Model classified as INVALID (confidence: {model_confidence_pct:.2f}%)"]
             else:
                 final_reasons = []
 
         return final_label, final_confidence_pct, final_reasons
-
+    # This function was generated with assistance from Copilot (Nov 2025 Version).
+    # Prompt: "Write a function to predict transparency compliance for a text file"
     def predict_file(self, path: str) -> Tuple[str, float, List[str]]:
         if not os.path.exists(path):
             raise FileNotFoundError(f"File not found: {path}")
@@ -193,11 +188,6 @@ def main():
     model_path = 'textbase_classifier.pkl'
     with open(model_path, 'wb') as f:
         pickle.dump(model_data, f)
-    
-    print(f"✓ Model saved to: {model_path}")
-    print("=" * 70)
-    print("Ready to use with FastAPI backend!")
-    print("=" * 70)
 
 
 if __name__ == "__main__":

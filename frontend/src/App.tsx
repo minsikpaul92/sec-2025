@@ -25,14 +25,11 @@ function App() {
       <div className="app-wrapper">
         <Header />
 
-        {/* Main Section: Tab + Form/Text_area side by side */}
         <div className="form-section">
-          {/* Left: Could be a logo or flag, or just empty */}
           <div className="logo-section">
             <div className="flag-icon">🇨🇦</div>
           </div>
           
-          {/* Right: Tab system with forms */}
           <div className="tabs-wrapper">
             <Tabs defaultValue="tab1" className="tabs">
               <TabsList className="tabs-list">
@@ -49,7 +46,6 @@ function App() {
           </div>
         </div>
 
-        {/* Result Section */}
         {result && (
           <ResultPanel result={result} statusMessage={resultMessage} />
         )}

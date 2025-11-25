@@ -22,7 +22,6 @@ function Form({ onResult }: FormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Compile data to send to backend
     const payload = {
       title,
       salary,
@@ -35,7 +34,6 @@ function Form({ onResult }: FormProps) {
       ai_used: aiUsed,
     };
 
-    // Send POST request to backend API
     const response = await fetch("http://localhost:8000/jobs-postings/field-base", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -44,7 +42,6 @@ function Form({ onResult }: FormProps) {
     const data = await response.json();
     console.log("Response from backend:", data);
     
-    // Call the onResult callback with the validation result
     if (onResult) {
       onResult({
         classification: data.classification || "ERROR",
@@ -55,6 +52,8 @@ function Form({ onResult }: FormProps) {
     }
   };
 
+  // This function was generated with assistance from Copilot (Nov 2025 Version).
+  // Prompt: "Can you update the ui to look better"
   return (
     <form onSubmit={handleSubmit}>
       <Input type="text" placeholder="Job title..." className="mt-4" value={title} onChange={e => setTitle(e.target.value)} />

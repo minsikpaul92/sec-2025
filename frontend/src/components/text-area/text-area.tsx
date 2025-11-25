@@ -20,7 +20,6 @@ function Text_area({ onResult }: TextAreaProps) {
     const data = await response.json();
     console.log("Response from backend:", data);
     
-    // Call the onResult callback with the validation result
     if (onResult) {
       onResult({
         classification: data.classification || "ERROR",
